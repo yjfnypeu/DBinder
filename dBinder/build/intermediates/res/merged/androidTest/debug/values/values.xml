@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/C:/Users/Administrator/Desktop/DBinderDemo/dBinder/build/intermediates/bundles/debug/res/values/values.xml -->
+    <eat-comment/>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <string name="action_settings">Settings</string>
+    <string name="app_name">DBinder</string>
+    <string name="hello_world">Hello world!</string>
+</resources>
