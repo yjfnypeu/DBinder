@@ -90,7 +90,7 @@ public class DBBindUtil {
 
             View v = rootView.findViewById(resId);
             if (v == null) {
-                throw new RuntimeException("字段名:" + field.getName() + "对应id名的View未找到");
+                continue;
             }
 
             IBindUnit unit = Reflect.on(unitClass).create(v).get();
