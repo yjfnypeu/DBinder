@@ -2,18 +2,12 @@ package com.lzh.dbinder.unit;
 
 import android.view.View;
 
-/**
- * 绑定设置View的visible属性。所需要的值与View原生一样.View.VISIBLE、View.INVISIBLE,View.GONE
- * @author Administrator
- *
- * @param <T>
- */
-public class ViewVisibleUnit<T extends View> implements IBindUnit<Integer, T> {
+public class ViewVisibleUnit implements IBindUnit<Integer> {
 	
-	private T mView;
+	private View mView;
 	private Integer visible;
 
-	public ViewVisibleUnit (T v) {
+	public ViewVisibleUnit (View v) {
 		doBindView(v);
 	}
 	
@@ -29,13 +23,18 @@ public class ViewVisibleUnit<T extends View> implements IBindUnit<Integer, T> {
 	}
 
 	@Override
-	public T unBindView() {
+	public View unBindView() {
 		return mView;
 	}
 
 	@Override
-	public void doBindView(T t) {
+	public void doBindView(View t) {
 		this.mView = t;
 	}
-	
+
+	@Override
+	public void detach() {
+		mView = null;
+	}
+
 }

@@ -2,23 +2,19 @@ package com.lzh.dbinder.unit;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 import android.widget.ImageView;
 
 /**
- * 绑定ImageView
- * 
- * @author lzh
- *
- * @param <E> 绑定的View类型
- * @param <T> 绑定至此View的数据类型
+ * Created by lzh on 2015/8/30.
  */
-public class ImageUnit<E extends ImageView, T> implements IBindUnit<T,E>{
+public class ImageUnit implements IBindUnit<Object>{
 
     private ImageView img;
-    private T data;
+    private Object data;
 
-    public ImageUnit(E img) {
-    	doBindView(img);
+    public ImageUnit(View img) {
+        doBindView(img);
     }
 
     public void doBind(Integer integer) {
@@ -34,12 +30,12 @@ public class ImageUnit<E extends ImageView, T> implements IBindUnit<T,E>{
     }
 
     @Override
-    public T unBindData() {
+    public Object unBindData() {
         return data;
     }
 
     @Override
-    public void doBind(T o) {
+    public void doBind(Object o) {
         this.data = o;
         if (o instanceof Integer) {
             doBind((Integer)o);
@@ -47,18 +43,26 @@ public class ImageUnit<E extends ImageView, T> implements IBindUnit<T,E>{
             doBind((Bitmap)o);
         } else if (o instanceof Drawable) {
             doBind((Drawable)o);
+        } else {
+            throw new RuntimeException("The bind type must be instance of Integer/Bitmap/Drawable");
         }
     }
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public E unBindView() {
-		return (E) img;
+	public ImageView unBindView() {
+		return (ImageView) img;
 	}
 
 	@Override
-	public void doBindView(E t) {
-		this.img = t;
+	public void doBindView(View t) {
+		this.img = (ImageView) t;
 	}
+
+    @Override
+    public void detach() {
+        this.img = null;
+        this.data = null;
+    }
 
 }

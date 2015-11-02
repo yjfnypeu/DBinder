@@ -1,15 +1,9 @@
 package com.lzh.dbinder.adapter;
 
-import java.util.List;
-
 import android.widget.BaseAdapter;
 
-/**
- * 使用ListUnit时所对应需要的Adapter基类。
- * @author lzh
- *
- * @param <T> 该Adapter中使用的数据源的泛型。
- */
+import java.util.List;
+
 public abstract class BaseListAdapter<T> extends BaseAdapter {
 
 	private List<T> list = null;

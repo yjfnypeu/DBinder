@@ -1,38 +1,42 @@
 package com.lzh.dbinder.unit;
 
+import android.view.View;
 import android.widget.TextView;
 
 /**
  * 绑定TextView与Value，直接设置setText
  * Created by lzh on 2015/8/30.
  */
-public class TVUnit<T extends TextView> implements IBindUnit<String,T>{
+public class TVUnit implements IBindUnit<String>{
 
-    private T tv;
-    private String data;
+    private TextView tv;
 
-    public TVUnit(T e) {
-    	doBindView(e);
+    public TVUnit(View e) {
+        doBindView(e);
     }
 
     @Override
     public String unBindData() {
-        return data;
+        return tv.getText().toString();
     }
 
     @Override
     public void doBind(String data) {
-        this.data = data;
         tv.setText(data);
     }
 
 	@Override
-	public T unBindView() {
+	public TextView unBindView() {
 		return tv;
 	}
 
 	@Override
-	public void doBindView(T t) {
-		this.tv = t;
+	public void doBindView(View t) {
+		this.tv = (TextView) t;
 	}
+
+    @Override
+    public void detach() {
+        this.tv = null;
+    }
 }

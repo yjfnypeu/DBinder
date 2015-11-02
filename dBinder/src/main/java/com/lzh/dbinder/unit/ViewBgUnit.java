@@ -5,18 +5,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-/**
- * 绑定设置View的background
- * @author lzh
- *
- * @param <E>
- */
-public class ViewBgUnit<E extends View> implements IBindUnit<Object, E> {
+public class ViewBgUnit implements IBindUnit<Object> {
 
-	private E e;
+	private View v;
 	private Object obj;
 	
-	public ViewBgUnit(E e) {
+	public ViewBgUnit(View e) {
 		doBindView(e);
 	}
 	
@@ -26,7 +20,7 @@ public class ViewBgUnit<E extends View> implements IBindUnit<Object, E> {
 	}
 	
 	private void doBindInteger(Integer integer) {
-		e.setBackgroundResource(integer);
+		v.setBackgroundResource(integer);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -37,12 +31,12 @@ public class ViewBgUnit<E extends View> implements IBindUnit<Object, E> {
 	
 	@SuppressWarnings("deprecation")
 	private void doBindDrawable(Drawable drawable) {
-		e.setBackgroundDrawable(drawable);
+		v.setBackgroundDrawable(drawable);
 	}
 	
 	public void doBindColor(Integer color) {
 		this.obj = color;
-		e.setBackgroundColor(color);
+		v.setBackgroundColor(color);
 	}
 	
 	@Override
@@ -54,17 +48,24 @@ public class ViewBgUnit<E extends View> implements IBindUnit<Object, E> {
 			doBindBitmap((Bitmap) e);
 		} else if (e instanceof Drawable) {
 			doBindDrawable((Drawable) e);
+		} else {
+			throw new RuntimeException("The bind type must be instance of Integer/Bitmap/Drawable");
 		}
 	}
 
 	@Override
-	public E unBindView() {
-		return e;
+	public View unBindView() {
+		return v;
 	}
 
 	@Override
-	public void doBindView(E t) {
-		this.e = t;
+	public void doBindView(View t) {
+		this.v = t;
+	}
+
+	@Override
+	public void detach() {
+		this.v = null;
 	}
 
 }
