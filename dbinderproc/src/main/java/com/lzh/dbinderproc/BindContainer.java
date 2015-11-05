@@ -192,7 +192,7 @@ public class BindContainer {
 		rebindMethodBuilder.addStatement(format("%s %s = null", clzElement.getSimpleName(), beanName));
 		rebindMethodBuilder.addStatement(format("%s %s = null", bindClzName, bindName));
 		rebindMethodBuilder.beginControlFlow(format("if (%s instanceof %s)",paramsBean,bindClzName))
-				.addStatement(format("%s = castToBean(%s,%s)",beanName,paramsView,paramsBean))
+				.addStatement(format("%s = castToBean(%s)",beanName,paramsBean))
 				.addStatement(format("%s = (%s)%s",bindName,bindClzName,paramsBean))
 				.endControlFlow()
 				.beginControlFlow("else")
@@ -215,16 +215,11 @@ public class BindContainer {
 	}
 
 	private void generateCastBeanMethod(String bindClzName, TypeSpec.Builder clzBuilder) {
-		String paramsView = "root";
 		String paramsBean = clzElement.getSimpleName().toString().toLowerCase();
 		MethodSpec.Builder castBeanMethodBuilder = MethodSpec.methodBuilder("castToBean")
 				.addModifiers(Modifier.STATIC,Modifier.PUBLIC)
-				.addParameter(getType("android.view.View"),paramsView)
 				.addParameter(TypeName.get(clzElement.asType()),paramsBean)
 				.returns(TypeName.get(clzElement.asType()));
-
-		castBeanMethodBuilder.beginControlFlow(format("if(%s == null)",paramsView))
-				.addStatement(format("throw new RuntimeException(%s)","\"The View of root is null\"")).endControlFlow();
 
 		castBeanMethodBuilder.beginControlFlow(format("if (%s == null || !(%s instanceof %s))",paramsBean,paramsBean,bindClzName))
 				.addStatement(format("return %s",paramsBean))
@@ -296,14 +291,14 @@ public class BindContainer {
 		// generate get method
 		MethodSpec.Builder getMethodBuilder = MethodSpec.overriding((ExecutableElement) holder.getElement);
 
-		getMethodBuilder.addStatement("return " + holder.name + ".unBindData()");
+		getMethodBuilder.addStatement("return " + "(" + ValidUtil.boxed(holder.fieldElement.asType()) + ")" + holder.name + ".unBindData()");
 		clzBuilder.addMethod(getMethodBuilder.build());
 
 		// generate set method
 		ExecutableElement superSetMethod = (ExecutableElement) holder.setElement;
 		MethodSpec.Builder setMethodBuilder = MethodSpec.overriding(superSetMethod);
 		String paramsName = superSetMethod.getParameters().get(0).getSimpleName().toString();
-		setMethodBuilder.addStatement("this." + holder.name + ".doBind(" + paramsName + ")");
+		setMethodBuilder.addStatement("this."  + holder.name + ".doBind(" + paramsName + ")");
 		setMethodBuilder.addStatement("super." + holder.setElement.getSimpleName().toString() + "(" + paramsName + ")");
 
 		clzBuilder.addMethod(setMethodBuilder.build());

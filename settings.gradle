@@ -1,2 +1,1 @@
-include ':app'
-include ':dBinder'
+include ':dBinder', ':dbinderproc',':dbindertest'
